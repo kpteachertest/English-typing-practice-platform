@@ -204,7 +204,7 @@
     </div>
   </div>
 
-  <!-- 二次確認彈窗 (僅保留身份確認) -->
+  <!-- 二次確認彈窗 -->
   <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-[60]">
     <div class="bg-white p-6 sm:p-8 rounded-3xl cartoon-box max-w-sm w-full text-center animate-cartoon-pop relative">
       <div class="text-4xl mb-2">👤</div>
@@ -369,7 +369,6 @@
     // --- 防護機制：禁止右鍵與開發者工具 ---
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.addEventListener('keydown', function(e) {
-      // 攔截 F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
       if (e.key === 'F12' || 
          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) || 
          (e.ctrlKey && (e.key === 'U' || e.key === 'u'))) {
@@ -380,15 +379,13 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrYxRMTVjEbpS23ajtqWJSsmFCHCAtlatDxapgwkGtVZupYhndao0YQK9knwyDK2Ry8Q/exec";
 
     // --- 1. 設定基準時間與每月自動提升（通膨）率 ---
-    // 基準月設定為：2026年9月 (JavaScript 中月份是 0-indexed，所以 8 代表 9月)
     const BASE_DATE = new Date(2026, 8, 1); 
-    const INFLATION_RATE_PER_MONTH = 0.10; // 每過一個月，門檻要求提升 10% (可自行修改)
+    const INFLATION_RATE_PER_MONTH = 0.10; 
 
-    // 計算已經經過了幾個月
     function getMonthsPassed() {
       const now = new Date();
       let months = (now.getFullYear() - BASE_DATE.getFullYear()) * 12 + (now.getMonth() - BASE_DATE.getMonth());
-      return Math.max(0, months); // 確保不小於 0
+      return Math.max(0, months); 
     }
 
     const monthsPassed = getMonthsPassed();
@@ -446,7 +443,6 @@
       { baseScore: 20000, title: '創世打字之神', icon: '👁️', skillName: '神之制裁', skillDesc: '無敵防護且得分x3(20秒)，立即加 200 分！', skillAction: () => { applyProtection(3, 20); setTimeout(() => applyInstantScore(200), 500); } }
     ];
 
-    // 動態產生這一個月的 RANKS（四捨五入至十位數，保持數值美觀）
     const RANKS = BASE_RANKS.map(rank => {
       let dynamicScore = rank.baseScore === 0 ? 0 : Math.round((rank.baseScore * scoreMultiplier) / 10) * 10;
       return { ...rank, score: dynamicScore };
@@ -468,15 +464,20 @@
     let isProtected = false;
     let skillTimeoutId = null;
 
-    // 動態計算週別函數：以 2026/8/31 為 Week 1 起始日
     function calculateWeek(dateObj) {
-      const startDay = new Date(2026, 7, 31); // 7 代表 8 月 (0-indexed)
+      const startDay = new Date(2026, 7, 31); 
       const current = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
       const diffTime = current - startDay;
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
       if (diffDays < 0) return "Week 1";
       const weekNum = Math.floor(diffDays / 7) + 1;
       return `Week ${weekNum}`;
+    }
+
+    // --- 更新版：雲端與本地分數同步邏輯 ---
+    function getStoredTotalScore() {
+      if (!selectedClass || !selectedSeat) return 0;
+      return parseInt(localStorage.getItem(`user_total_score_${selectedClass}_${selectedSeat}`) || '0', 10);
     }
 
     function checkStudentIdentity() {
@@ -492,6 +493,7 @@
         document.getElementById('home-week-score').innerText = '0 分';
         document.getElementById('home-week-wpm').innerText = '0 WPM';
         document.getElementById('current-week-label').innerText = '📅 本週打字戰績 (請先登錄身分)';
+        updateRankUI();
       }
     }
 
@@ -506,10 +508,19 @@
         const scriptEl = document.getElementById(callbackName);
         if (scriptEl) scriptEl.remove();
 
-        if (res && res.status === "success" && res.rankings && res.rankings.weekly) {
-          const weekly = res.rankings.weekly;
-          document.getElementById('home-week-score').innerText = `${weekly.score || 0} 分`;
-          document.getElementById('home-week-wpm').innerText = `${weekly.maxWpm || 0} WPM`;
+        if (res && res.status === "success" && res.rankings) {
+          if (res.rankings.weekly) {
+            const weekly = res.rankings.weekly;
+            document.getElementById('home-week-score').innerText = `${weekly.score || 0} 分`;
+            document.getElementById('home-week-wpm').innerText = `${weekly.maxWpm || 0} WPM`;
+          }
+          
+          // 雲端總龍虎榜總分同步至本地，解決重新從 0 開始的問題
+          if (res.rankings.total && typeof res.rankings.total.score !== 'undefined') {
+            const cloudTotal = res.rankings.total.score;
+            localStorage.setItem(`user_total_score_${selectedClass}_${selectedSeat}`, cloudTotal.toString());
+            updateRankUI();
+          }
         } else {
           document.getElementById('home-week-score').innerText = '0 分';
           document.getElementById('home-week-wpm').innerText = '0 WPM';
@@ -640,44 +651,76 @@
 
     function closeMonthlyModal() { document.getElementById('monthly-stats-modal').classList.add('hidden'); }
 
+    // --- 教材題庫 (Ready Vocab 2A & 3A) ---
     const g2MasterBank = [
-      ["aaaaa zzzzz qqqqq"], ["qqqqq aaaaa zzzzz"], ["qaqa zaza qzqz"],
-      ["wwsss xxsxs xws"], ["wwwww sssss xxxxx"], ["wsws xsxs wsxs"],
-      ["eeeee ddddd ccccc"], ["eded cdcd edcd"], ["rrrrr fffff vvvvv"],
-      ["rfv rfv tgb tgb"], ["yyyyy hhhhh nnnnn"], ["uuuuu jjjjj mmmmm"],
-      ["iiiii kkkkk ikik ikik"], ["ooooo lllll olol olol"], ["ppppp ppppp ppppp"],
-      ["aaaaa sssss ddddd fffff"], ["jjjjj kkkkk lllll ppppp"], ["asdfg hjkl"],
-      ["qaz wsx edc rfv tgb yhn ujm ik ol p"]
+      ["bank cake shop cinema clinic"],
+      ["fire station park police station"],
+      ["post office restaurant supermarket"],
+      ["hungry cafe unhappy behind near"],
+      ["drink juice eat sandwiches"],
+      ["have a picnic play on a slide"],
+      ["play on a swing ride a scooter"],
+      ["run in the playground take photos"],
+      ["art room classroom computer room"],
+      ["hall library music room tuck shop"],
+      ["glasses hair clip jacket tie"],
+      ["umbrella wallet watch water bottle"],
+      ["car taxi bus minibus school bus"],
+      ["tram ferry on foot Taipa Island"],
+      ["doctor nurse driver shopkeeper"],
+      ["policeman postman firefighter teacher"]
     ];
 
     const g3MasterBank = [
       [
-        "The sun is shining brightly today.",
-        "Birds are singing happy songs in the tall trees."
+        "I like playing online games.",
+        "Susan collects cards of different animals."
       ],
       [
-        "I get up at seven o'clock every morning.",
-        "Then I brush my teeth and eat breakfast."
+        "Eva likes doing ballet.",
+        "She does not like playing the violin."
       ],
       [
-        "I go to school with my best friend.",
-        "We like to read story books together."
+        "Sammy likes English.",
+        "She loves reading English storybooks."
       ],
       [
-        "Summer is coming soon.",
-        "We can go to the beach and swim in the blue water."
+        "I love General Studies.",
+        "I like making models and doing projects."
       ],
       [
-        "My dog loves to play in the park.",
-        "He runs very fast to catch the red ball."
+        "Exam Week is coming.",
+        "We have to study hard."
       ],
       [
-        "Every morning I eat breakfast with my family.",
-        "I like to drink milk and eat apples."
+        "My father visits my school on Open Day.",
+        "He talks to my class teacher."
+      ],
+      [
+        "I want to buy a storybook.",
+        "Let's have lunch in the cafe."
+      ],
+      [
+        "Where is the clothes shop?",
+        "I want to buy a pair of jeans."
+      ],
+      [
+        "We have showers in the bathroom.",
+        "I put my school bag in my bedroom."
+      ],
+      [
+        "My mother is busy.",
+        "She is cooking in the kitchen."
+      ],
+      [
+        "I can help my mother fold the clothes.",
+        "Jack makes the bed every morning."
+      ],
+      [
+        "Lily can set the table before dinner.",
+        "I can wash the dishes after dinner."
       ]
     ];
-
-    function getStoredTotalScore() { return parseInt(localStorage.getItem('user_total_score') || '0', 10); }
 
     function getCurrentRank() {
       const totalScore = getStoredTotalScore();
@@ -691,7 +734,6 @@
     function updateRankUI() {
       const totalScore = getStoredTotalScore();
       document.getElementById('user-total-score').innerText = totalScore;
-      checkStudentIdentity();
       
       let currentRank = RANKS[0], nextRank = null;
       for (let i = 0; i < RANKS.length; i++) {
@@ -727,7 +769,6 @@
       currentMode = mode;
       resetStats();
       
-      // 處理技能按鈕狀態
       const rank = getCurrentRank();
       const skillBtn = document.getElementById('skill-btn');
       const skillText = document.getElementById('skill-btn-text');
@@ -916,7 +957,7 @@
 
       if (charToAdd === expectedChar) {
         userTypedString += charToAdd;
-        score += (1 * currentMultiplier); // 🌟 應用技能乘數
+        score += (1 * currentMultiplier); 
         combo++;
         if (combo > maxCombo) maxCombo = combo;
 
@@ -929,7 +970,7 @@
           combo = 0;
           score = Math.max(0, score - 1);
         } else {
-          showTaikoComboEffect(`🛡️ 防禦成功！`); // 無敵狀態不扣分不斷連
+          showTaikoComboEffect(`🛡️ 防禦成功！`);
         }
       }
 
@@ -960,7 +1001,6 @@
       el.className = 'taiko-combo-text';
       el.innerText = text;
       
-      // 隨機微調位置避免文字完全重疊
       const offsetX = (Math.random() - 0.5) * 40;
       const offsetY = (Math.random() - 0.5) * 40;
       el.style.marginLeft = `${offsetX}px`;
@@ -997,14 +1037,16 @@
       document.getElementById('res-max-combo').innerText = maxCombo;
       document.getElementById('res-errors').innerText = errorCount;
 
+      // 遊戲結算後本地即時累加該學號的總分
       const oldTotal = getStoredTotalScore();
-      localStorage.setItem('user_total_score', (oldTotal + score).toString());
+      const newTotal = oldTotal + score;
+      if (selectedClass && selectedSeat) {
+        localStorage.setItem(`user_total_score_${selectedClass}_${selectedSeat}`, newTotal.toString());
+      }
 
-      // 動態依當前真實日期計算週別 (以 2026/8/31 為第一週)
       const calculatedWeek = calculateWeek(new Date());
       const currentDateStr = new Date().toLocaleString('zh-TW', { hour12: false });
 
-      // 本地歷史紀錄
       const recordData = {
         week: calculatedWeek,
         className: selectedClass,
@@ -1017,7 +1059,6 @@
       };
       saveRecord(recordData);
 
-      // 送至 Google Sheets (乾淨、正確對應的 Payload)
       const payload = {
         week: calculatedWeek,       
         className: selectedClass,   
@@ -1088,7 +1129,7 @@
               <div>
                 <h4 class="font-black text-sm text-slate-900">${rank.title}</h4>
                 <p class="text-[10px] text-slate-500 font-black">需累積 ${rank.score} 分</p>
-                ${rank.skillName !== '無' ? `<p class="text-[10px] text-fuchsia-600 font-black mt-0.5">✨ ${rank.skillName}: ${rank.skillDesc}</p>` : ''}
+                ${rank.skillName !== '無' ? `<p class="text-[10px] text-fuchsia-600 font-black mt-0.5">✨ ${rank.skillName}:${rank.skillDesc}</p>` : ''}
               </div>
             </div>
             <div class="flex flex-col items-end space-y-1">
@@ -1141,7 +1182,9 @@
       }
     }
 
-    updateRankUI();
+    // 啟動時執行一次介面初始化
+    checkStudentIdentity();
+
   </script>
 </body>
 </html>
