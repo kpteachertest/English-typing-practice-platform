@@ -100,26 +100,22 @@
   <!-- 1. 首頁 -->
   <div id="welcome-screen" class="text-center bg-white p-6 sm:p-8 rounded-3xl cartoon-box w-full max-w-xl my-auto animate-cartoon-pop relative z-20">
     
-    <div class="bg-amber-200 rounded-2xl p-4 mb-4 cartoon-box relative overflow-hidden">
-      <div class="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-wider">🌟 冒險者等級與進化形態</div>
-      
-      <div class="flex items-center justify-center space-x-4 my-2">
-        <div id="avatar-container" class="text-5xl sm:text-6xl bg-white p-2.5 rounded-2xl cartoon-box transform transition">
-          <span id="user-badge-icon">🐣</span>
+    <!-- 📅 當週戰績摘要卡 (移到最上方並突出顯示) -->
+    <div class="bg-gradient-to-br from-pink-200 to-rose-200 rounded-2xl p-4 mb-4 cartoon-box border-4 border-slate-900 shadow-[0_0_15px_rgba(244,63,94,0.4)] transform hover:scale-[1.02] transition-transform">
+      <div class="flex justify-between items-center pb-2 mb-3 border-b-4 border-slate-900 text-sm sm:text-base font-black text-slate-800">
+        <span id="current-week-label" class="text-rose-700 drop-shadow-sm text-lg">📅 本週打字戰績</span>
+        <span class="text-xs text-slate-600 bg-white px-2 py-1 rounded-full border-2 border-slate-900">雲端同步</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white p-3 rounded-xl border-4 border-slate-900 text-left">
+          <span class="text-xs sm:text-sm text-slate-500 font-black block mb-1">⭐ 本週獲得積分</span>
+          <span id="home-week-score" class="text-3xl sm:text-4xl font-black text-rose-600 drop-shadow">0 分</span>
         </div>
-        <div class="text-left">
-          <div class="flex items-baseline space-x-1">
-            <span id="user-total-score" class="text-3xl sm:text-4xl font-black text-indigo-600 drop-shadow">0</span>
-            <span class="text-base text-slate-800 font-black">分</span>
-          </div>
-          <div class="text-sm sm:text-base font-black text-slate-900" id="user-rank-title">稱號：打字新手</div>
+        <div class="bg-white p-3 rounded-xl border-4 border-slate-900 text-left">
+          <span class="text-xs sm:text-sm text-slate-500 font-black block mb-1">⚡ 本週最快速度</span>
+          <span id="home-week-wpm" class="text-3xl sm:text-4xl font-black text-emerald-600 drop-shadow">0 WPM</span>
         </div>
       </div>
-
-      <div class="w-full bg-white rounded-full h-4 mt-2 border-3 border-slate-900 overflow-hidden relative">
-        <div id="rank-progress" class="bg-gradient-to-r from-yellow-400 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
-      </div>
-      <div class="text-xs text-slate-800 mt-1 font-black" id="next-rank-info">載入中...</div>
     </div>
 
     <!-- 學生身分狀態欄 -->
@@ -130,22 +126,25 @@
       </button>
     </div>
 
-    <!-- 📅 當週戰績摘要卡 -->
-    <div class="bg-pink-100 rounded-2xl p-3 mb-4 cartoon-box">
-      <div class="flex justify-between items-center pb-1.5 mb-2 border-b-2 border-slate-900 text-xs font-black text-slate-800">
-        <span id="current-week-label">📅 本週打字戰績</span>
-        <span class="text-[10px] text-slate-500">雲端同步即時計算</span>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div class="bg-white p-2 rounded-xl border-2 border-slate-900 text-left">
-          <span class="text-[11px] text-slate-500 font-black block">⭐ 本週積分</span>
-          <span id="home-week-score" class="text-xl font-black text-indigo-600">0 分</span>
+    <!-- 🌟 冒險者等級與進化形態 (移到下方，稍微縮小) -->
+    <div class="bg-amber-100 rounded-2xl p-3 mb-4 cartoon-box relative overflow-hidden">
+      <div class="text-[11px] sm:text-xs font-black text-slate-600 uppercase tracking-wider mb-2">🌟 累積總積分與進化形態</div>
+      <div class="flex items-center justify-center space-x-4 mb-2">
+        <div id="avatar-container" class="text-4xl sm:text-5xl bg-white p-2 rounded-xl cartoon-box">
+          <span id="user-badge-icon">🐣</span>
         </div>
-        <div class="bg-white p-2 rounded-xl border-2 border-slate-900 text-left">
-          <span class="text-[11px] text-slate-500 font-black block">⚡ 最快打字速度</span>
-          <span id="home-week-wpm" class="text-xl font-black text-emerald-600">0 WPM</span>
+        <div class="text-left">
+          <div class="flex items-baseline space-x-1">
+            <span id="user-total-score" class="text-2xl sm:text-3xl font-black text-indigo-600 drop-shadow-sm">0</span>
+            <span class="text-sm text-slate-800 font-black">分</span>
+          </div>
+          <div class="text-xs sm:text-sm font-black text-slate-800" id="user-rank-title">稱號：打字新手</div>
         </div>
       </div>
+      <div class="w-full bg-white rounded-full h-3 mt-1 border-2 border-slate-900 overflow-hidden relative">
+        <div id="rank-progress" class="bg-gradient-to-r from-yellow-400 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+      <div class="text-[10px] text-slate-700 mt-1.5 font-black" id="next-rank-info">載入中...</div>
     </div>
 
     <h1 class="text-2xl sm:text-4xl font-black text-indigo-600 mb-2 tracking-wide drop-shadow-[2px_2px_0px_#0f172a]">🎮 2分鐘打字大冒險</h1>
@@ -215,7 +214,7 @@
       </div>
 
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="backToSelectModal()" class="bg-rose-300 hover:bg-rose-200 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">✏️ 修改身份</button>
+        <button onclick="backToSelectModal()" class="bg-rose-300 hover:bg-rose-200 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">✏️️ 修改身份</button>
         <button onclick="confirmStudentAndStart()" class="bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">🚀 開始遊戲！</button>
       </div>
     </div>
@@ -276,7 +275,7 @@
 
       <div class="bg-indigo-100 p-3 sm:p-4 rounded-2xl cartoon-box flex flex-col justify-between space-y-2 flex-shrink-0">
         <div>
-          <h3 class="text-base sm:text-lg font-black text-slate-900 text-center pb-1.5 border-b-4 border-slate-900">🛡️ 戰鬥數據</h3>
+          <h3 class="text-base sm:text-lg font-black text-slate-900 text-center pb-1.5 border-b-4 border-slate-900">🛡️️ 戰鬥數據</h3>
           <div class="grid grid-cols-2 md:grid-cols-1 gap-2 flex-1 justify-center flex-col mt-2">
             <div class="bg-white p-2.5 rounded-xl cartoon-box flex justify-between items-center md:block">
               <span class="text-[11px] font-black text-slate-500 block">⭐ 當前積分</span>
@@ -416,7 +415,7 @@
     function applyProtection(mult, secs) {
       currentMultiplier = mult;
       isProtected = true;
-      showTaikoComboEffect(`🛡️ 無敵 & 得分 x${mult}！`);
+      showTaikoComboEffect(`🛡 無敵 & 得分 x${mult}！`);
       skillTimeoutId = setTimeout(() => {
         currentMultiplier = 1;
         isProtected = false;
@@ -429,7 +428,7 @@
       { baseScore: 0, title: '打字新手', icon: '🐣', skillName: '無', skillDesc: '努力升級解鎖專屬技能！', skillAction: null },
       { baseScore: 100, title: '字母精靈', icon: '🧚', skillName: '精靈守護', skillDesc: '發動立即增加 10 積分', skillAction: () => applyInstantScore(10) },
       { baseScore: 300, title: '單字獵人', icon: '🏹', skillName: '精準射擊', skillDesc: '發動立即增加 30 積分', skillAction: () => applyInstantScore(30) },
-      { baseScore: 600, title: '鍵盤騎士', icon: '⚔️', skillName: '騎士衝鋒', skillDesc: '10秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 10) },
+      { baseScore: 600, title: '鍵盤騎士', icon: '⚔', skillName: '騎士衝鋒', skillDesc: '10秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 10) },
       { baseScore: 1000, title: '疾速法師', icon: '🧙', skillName: '時間魔法', skillDesc: '發動立即增加 10 秒遊戲時間', skillAction: () => applyTime(10) },
       { baseScore: 1800, title: '打字霸主', icon: '🐉', skillName: '龍之吐息', skillDesc: '發動立即增加 80 積分', skillAction: () => applyInstantScore(80) },
       { baseScore: 2800, title: '神級打字王', icon: '👑', skillName: '王者加冕', skillDesc: '15秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 15) },
@@ -501,6 +500,9 @@
       if (!selectedClass || !selectedSeat) return;
 
       document.getElementById('current-week-label').innerText = `📅 本週打字戰績`;
+      // --- 新增：載入中動畫提示 ---
+      document.getElementById('home-week-score').innerHTML = '<span class="text-2xl sm:text-3xl text-slate-400 animate-pulse drop-shadow-none">讀取中...</span>';
+      document.getElementById('home-week-wpm').innerHTML = '<span class="text-2xl sm:text-3xl text-slate-400 animate-pulse drop-shadow-none">讀取中...</span>';
 
       const callbackName = 'handleHomeWeekly_' + Math.round(100000 * Math.random());
       window[callbackName] = function(res) {
@@ -801,6 +803,8 @@
       const input = document.getElementById('type-input');
       input.value = ''; userTypedString = ''; input.disabled = false; input.focus();
       nextTopic(); startTimer();
+      
+      activateSkill(); // 自動觸發技能
     }
 
     function activateSkill() {
@@ -906,7 +910,16 @@
 
     const inputEl = document.getElementById('type-input');
 
-    inputEl.addEventListener('keydown', (e) => {
+    // 將按鍵監聽改為全域 document，實現「不用點擊輸入框也能直接打字」
+    document.addEventListener('keydown', (e) => {
+      // 確保只在遊戲畫面中才攔截按鍵
+      if (document.getElementById('game-screen').classList.contains('hidden')) return;
+      
+      // 自動將焦點拉回輸入框，確保打字順暢且能彈出手機小鍵盤
+      if (document.activeElement !== inputEl) {
+        inputEl.focus();
+      }
+
       if (e.code === 'Backspace') {
         e.preventDefault();
         if (userTypedString.length > 0) {
