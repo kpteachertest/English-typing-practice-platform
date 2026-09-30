@@ -100,7 +100,7 @@
   <!-- 1. 首頁 -->
   <div id="welcome-screen" class="text-center bg-white p-6 sm:p-8 rounded-3xl cartoon-box w-full max-w-xl my-auto animate-cartoon-pop relative z-20">
     
-    <!-- 📅 當週戰績摘要卡 (移到最上方並突出顯示) -->
+    <!-- 📅 當週戰績摘要卡 -->
     <div class="bg-gradient-to-br from-pink-200 to-rose-200 rounded-2xl p-4 mb-4 cartoon-box border-4 border-slate-900 shadow-[0_0_15px_rgba(244,63,94,0.4)] transform hover:scale-[1.02] transition-transform">
       <div class="flex justify-between items-center pb-2 mb-3 border-b-4 border-slate-900 text-sm sm:text-base font-black text-slate-800">
         <span id="current-week-label" class="text-rose-700 drop-shadow-sm text-lg">📅 本週打字戰績</span>
@@ -126,7 +126,7 @@
       </button>
     </div>
 
-    <!-- 🌟 冒險者等級與進化形態 (移到下方，稍微縮小) -->
+    <!-- 🌟 冒險者等級與進化形態 -->
     <div class="bg-amber-100 rounded-2xl p-3 mb-4 cartoon-box relative overflow-hidden">
       <div class="text-[11px] sm:text-xs font-black text-slate-600 uppercase tracking-wider mb-2">🌟 累積總積分與進化形態</div>
       <div class="flex items-center justify-center space-x-4 mb-2">
@@ -214,7 +214,7 @@
       </div>
 
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="backToSelectModal()" class="bg-rose-300 hover:bg-rose-200 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">✏️️ 修改身份</button>
+        <button onclick="backToSelectModal()" class="bg-rose-300 hover:bg-rose-200 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">✏️ 修改身份</button>
         <button onclick="confirmStudentAndStart()" class="bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">🚀 開始遊戲！</button>
       </div>
     </div>
@@ -275,7 +275,7 @@
 
       <div class="bg-indigo-100 p-3 sm:p-4 rounded-2xl cartoon-box flex flex-col justify-between space-y-2 flex-shrink-0">
         <div>
-          <h3 class="text-base sm:text-lg font-black text-slate-900 text-center pb-1.5 border-b-4 border-slate-900">🛡️️ 戰鬥數據</h3>
+          <h3 class="text-base sm:text-lg font-black text-slate-900 text-center pb-1.5 border-b-4 border-slate-900">🛡️ 戰鬥數據</h3>
           <div class="grid grid-cols-2 md:grid-cols-1 gap-2 flex-1 justify-center flex-col mt-2">
             <div class="bg-white p-2.5 rounded-xl cartoon-box flex justify-between items-center md:block">
               <span class="text-[11px] font-black text-slate-500 block">⭐ 當前積分</span>
@@ -309,6 +309,35 @@
     </div>
   </div>
 
+  <!-- 🎲 打字知識小測驗 Modal -->
+  <div id="quiz-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-[55]">
+    <div class="bg-white p-6 sm:p-8 rounded-3xl cartoon-box max-w-md w-full text-center animate-cartoon-pop relative">
+      <div class="text-4xl mb-3 animate-bounce">🤔</div>
+      <h3 id="quiz-title" class="text-xl sm:text-2xl font-black text-indigo-600 mb-4">🧠 打字知識小測驗 (1/2)</h3>
+      
+      <div class="bg-indigo-50 p-5 rounded-2xl cartoon-box mb-5 min-h-[120px] flex items-center justify-center">
+        <p id="quiz-q-text" class="text-lg font-black text-slate-800 leading-relaxed"></p>
+      </div>
+
+      <div id="quiz-options" class="grid grid-cols-2 gap-3">
+        <button onclick="answerQuiz(true)" class="bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black text-xl py-3 rounded-xl cartoon-btn flex items-center justify-center space-x-2">
+          <span>⭕ 是</span>
+        </button>
+        <button onclick="answerQuiz(false)" class="bg-rose-400 hover:bg-rose-300 text-slate-900 font-black text-xl py-3 rounded-xl cartoon-btn flex items-center justify-center space-x-2">
+          <span>❌ 否</span>
+        </button>
+      </div>
+
+      <div id="quiz-result-box" class="hidden bg-slate-100 p-4 rounded-xl cartoon-box mb-4 min-h-[80px] flex flex-col justify-center">
+        <!-- JS 寫入答對/答錯與解析 -->
+      </div>
+      
+      <button id="quiz-next-btn" onclick="nextQuiz()" class="hidden w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-black py-3 rounded-xl cartoon-btn text-lg mt-4">
+        下一題 ➡️
+      </button>
+    </div>
+  </div>
+
   <!-- 3. 結算畫面 (Modal) -->
   <div id="result-screen" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
     <div class="bg-white p-6 sm:p-8 rounded-3xl cartoon-box max-w-md w-full text-center animate-cartoon-pop relative">
@@ -317,8 +346,11 @@
       
       <div class="space-y-2 bg-amber-100 p-4 rounded-2xl cartoon-box text-left mb-5 font-black text-sm sm:text-base">
         <p class="text-slate-800">👤 班級學號：<span id="res-student-id" class="text-xl text-indigo-700 font-black">--</span></p>
-        <p class="text-slate-800">⭐ 本局獲得積分：<span id="res-score" class="text-2xl text-indigo-600 font-black">0</span> 分</p>
-        <p id="add-score-msg" class="text-xs text-amber-800 font-black">✨ 已累積存入冒險者總積分！角色正不斷進化變強！</p>
+        <div class="bg-white/60 p-2 rounded-xl border-2 border-amber-200">
+          <p class="text-slate-800">⭐ 本局獲得積分：<span id="res-score" class="text-2xl text-indigo-600 font-black">0</span> 分</p>
+          <span id="res-bonus-text" class="text-xs text-fuchsia-600 font-black block mt-1"></span>
+        </div>
+        <p id="add-score-msg" class="text-xs text-amber-800 font-black pt-1">✨ 已累積存入冒險者總積分！角色正不斷進化變強！</p>
         <p class="text-slate-800">⚡ 平均打字速度：<span id="res-wpm" class="text-xl text-emerald-600 font-black">0</span> WPM</p>
         <p class="text-slate-800">🎯 最高連擊 Combo：<span id="res-max-combo" class="text-xl text-orange-500 font-black">0</span> 連擊</p>
         <p class="text-slate-800">❌ 失誤次數：<span id="res-errors" class="text-xl text-rose-500 font-black">0</span> 次</p>
@@ -415,7 +447,7 @@
     function applyProtection(mult, secs) {
       currentMultiplier = mult;
       isProtected = true;
-      showTaikoComboEffect(`🛡 無敵 & 得分 x${mult}！`);
+      showTaikoComboEffect(`🛡️ 無敵 & 得分 x${mult}！`);
       skillTimeoutId = setTimeout(() => {
         currentMultiplier = 1;
         isProtected = false;
@@ -428,7 +460,7 @@
       { baseScore: 0, title: '打字新手', icon: '🐣', skillName: '無', skillDesc: '努力升級解鎖專屬技能！', skillAction: null },
       { baseScore: 100, title: '字母精靈', icon: '🧚', skillName: '精靈守護', skillDesc: '發動立即增加 10 積分', skillAction: () => applyInstantScore(10) },
       { baseScore: 300, title: '單字獵人', icon: '🏹', skillName: '精準射擊', skillDesc: '發動立即增加 30 積分', skillAction: () => applyInstantScore(30) },
-      { baseScore: 600, title: '鍵盤騎士', icon: '⚔', skillName: '騎士衝鋒', skillDesc: '10秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 10) },
+      { baseScore: 600, title: '鍵盤騎士', icon: '⚔️', skillName: '騎士衝鋒', skillDesc: '10秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 10) },
       { baseScore: 1000, title: '疾速法師', icon: '🧙', skillName: '時間魔法', skillDesc: '發動立即增加 10 秒遊戲時間', skillAction: () => applyTime(10) },
       { baseScore: 1800, title: '打字霸主', icon: '🐉', skillName: '龍之吐息', skillDesc: '發動立即增加 80 積分', skillAction: () => applyInstantScore(80) },
       { baseScore: 2800, title: '神級打字王', icon: '👑', skillName: '王者加冕', skillDesc: '15秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 15) },
@@ -462,6 +494,45 @@
     let currentMultiplier = 1;
     let isProtected = false;
     let skillTimeoutId = null;
+    
+    // --- 測驗相關變數 ---
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let quizBonus = 0;
+
+    // --- 指法是非題題庫 ---
+    const quizBank = [
+      { q: "英文字母 Q 鍵是由左手尾指負責輸入？", a: true, exp: "正確！上排的 Q 鍵由「左手尾指」負責。" },
+      { q: "英文字母 W 鍵是由左手中指負責輸入？", a: false, exp: "錯囉！W 鍵是由「左手無名指」負責。" },
+      { q: "英文字母 E 鍵是由左手中指負責輸入？", a: true, exp: "正確！上排的 E 鍵由「左手中指」負責。" },
+      { q: "英文字母 R 鍵是由左手食指負責輸入？", a: true, exp: "正確！上排的 R 鍵由「左手食指」負責。" },
+      { q: "英文字母 T 鍵是由右手食指負責輸入？", a: false, exp: "錯囉！T 鍵是由「左手食指」負責。" },
+      { q: "英文字母 Y 鍵是由右手食指負責輸入？", a: true, exp: "正確！上排的 Y 鍵由「右手食指」負責。" },
+      { q: "英文字母 U 鍵是由左手食指負責輸入？", a: false, exp: "錯囉！U 鍵是由「右手食指」負責。" },
+      { q: "英文字母 I 鍵是由右手中指負責輸入？", a: true, exp: "正確！上排的 I 鍵由「右手中指」負責。" },
+      { q: "英文字母 O 鍵是由右手無名指負責輸入？", a: true, exp: "正確！上排的 O 鍵由「右手無名指」負責。" },
+      { q: "英文字母 P 鍵是由右手尾指負責輸入？", a: true, exp: "正確！上排的 P 鍵由「右手尾指」負責。" },
+      { q: "英文字母 P 鍵是由左手尾指負責輸入？", a: false, exp: "錯囉！P 鍵是由「右手尾指」負責。" },
+      { q: "英文字母 A 鍵是由左手尾指負責輸入？", a: true, exp: "正確！中間排的 A 鍵由「左手尾指」負責。" },
+      { q: "英文字母 S 鍵是由左手食指負責輸入？", a: false, exp: "錯囉！S 鍵是由「左手無名指」負責。" },
+      { q: "英文字母 D 鍵是由左手中指負責輸入？", a: true, exp: "正確！中間排的 D 鍵由「左手中指」負責。" },
+      { q: "英文字母 F 鍵是由左手食指負責輸入？", a: true, exp: "正確！中間排的 F 鍵由「左手食指」負責。" },
+      { q: "英文字母 G 鍵是由右手食指負責輸入？", a: false, exp: "錯囉！G 鍵是由「左手食指」負責。" },
+      { q: "英文字母 H 鍵是由右手食指負責輸入？", a: true, exp: "正確！中間排的 H 鍵由「右手食指」負責。" },
+      { q: "英文字母 J 鍵是由左手食指負責輸入？", a: false, exp: "錯囉！J 鍵是由「右手食指」負責。" },
+      { q: "英文字母 K 鍵是由右手中指負責輸入？", a: true, exp: "正確！中間排的 K 鍵由「右手中指」負責。" },
+      { q: "英文字母 L 鍵是由右手無名指負責輸入？", a: true, exp: "正確！中間排的 L 鍵由「右手無名指」負責。" },
+      { q: "英文字母 Z 鍵是由右手尾指負責輸入？", a: false, exp: "錯囉！Z 鍵是由「左手尾指」負責。" },
+      { q: "英文字母 X 鍵是由左手無名指負責輸入？", a: true, exp: "正確！下排的 X 鍵由「左手無名指」負責。" },
+      { q: "英文字母 C 鍵是由左手食指負責輸入？", a: false, exp: "錯囉！C 鍵是由「左手中指」負責。" },
+      { q: "英文字母 C 鍵是由左手中指負責輸入？", a: true, exp: "正確！下排的 C 鍵由「左手中指」負責。" },
+      { q: "英文字母 V 鍵是由左手尾指負責輸入？", a: false, exp: "錯囉！V 鍵是由「左手食指」負責。" },
+      { q: "英文字母 B 鍵是由左手食指負責輸入？", a: true, exp: "正確！下排的 B 鍵由「左手食指」負責。" },
+      { q: "英文字母 N 鍵是由左手食指負責輸入？", a: false, exp: "錯囉！N 鍵是由「右手食指」負責。" },
+      { q: "英文字母 N 鍵是由右手食指負責輸入？", a: true, exp: "正確！下排的 N 鍵由「右手食指」負責。" },
+      { q: "英文字母 M 鍵是由右手中指負責輸入？", a: false, exp: "錯囉！M 鍵是由「右手食指」負責。" },
+      { q: "空白鍵(Space)是由尾指負責輸入？", a: false, exp: "錯囉！空白鍵是由「大拇指」負責的喔。" }
+    ];
 
     function calculateWeek(dateObj) {
       const startDay = new Date(2026, 7, 31); 
@@ -473,7 +544,6 @@
       return `Week ${weekNum}`;
     }
 
-    // --- 更新版：雲端與本地分數同步邏輯 ---
     function getStoredTotalScore() {
       if (!selectedClass || !selectedSeat) return 0;
       return parseInt(localStorage.getItem(`user_total_score_${selectedClass}_${selectedSeat}`) || '0', 10);
@@ -484,7 +554,7 @@
       const identityText = document.getElementById('display-student-identity');
 
       if (selectedClass && selectedSeat) {
-        identityText.innerText = `${selectedClass} - ${selectedSeat} 號`;
+        identityText.innerText = `${selectedClass} -${selectedSeat} 號`;
         studentBar.classList.remove('hidden');
         fetchHomeWeeklyStats();
       } else {
@@ -500,7 +570,6 @@
       if (!selectedClass || !selectedSeat) return;
 
       document.getElementById('current-week-label').innerText = `📅 本週打字戰績`;
-      // --- 新增：載入中動畫提示 ---
       document.getElementById('home-week-score').innerHTML = '<span class="text-2xl sm:text-3xl text-slate-400 animate-pulse drop-shadow-none">讀取中...</span>';
       document.getElementById('home-week-wpm').innerHTML = '<span class="text-2xl sm:text-3xl text-slate-400 animate-pulse drop-shadow-none">讀取中...</span>';
 
@@ -517,7 +586,6 @@
             document.getElementById('home-week-wpm').innerText = `${weekly.maxWpm || 0} WPM`;
           }
           
-          // 雲端總龍虎榜總分同步至本地，解決重新從 0 開始的問題
           if (res.rankings.total && typeof res.rankings.total.score !== 'undefined') {
             const cloudTotal = res.rankings.total.score;
             localStorage.setItem(`user_total_score_${selectedClass}_${selectedSeat}`, cloudTotal.toString());
@@ -536,13 +604,31 @@
       document.body.appendChild(script);
     }
 
+    // --- 修改處：在已經登錄身分時，阻擋跨年級點擊，並跳過選單 ---
     function promptStudentInfo(mode) {
+      if (selectedClass && selectedSeat) {
+        if (mode === 'g2' && selectedClass.startsWith('P3')) {
+          alert('⚠️ 您目前登錄的是【三年級】身分！\n請選擇下方的「三年級：極速短文挑戰」。\n\n（若需更換玩家，請點擊「✏️ 修改身分」）');
+          return;
+        }
+        if (mode === 'g3' && selectedClass.startsWith('P2')) {
+          alert('⚠️ 您目前登錄的是【二年級】身分！\n請選擇上方的「二年級：肌肉記憶關卡」。\n\n（若需更換玩家，請點擊「✏️ 修改身分」）');
+          return;
+        }
+        
+        pendingMode = mode;
+        tempClass = selectedClass;
+        tempSeat = selectedSeat;
+        document.getElementById('confirm-identity-text').innerText = `${tempClass} -${tempSeat} 號`;
+        document.getElementById('confirm-modal').classList.remove('hidden');
+        return;
+      }
+      
       pendingMode = mode;
       openStudentModal(mode);
     }
 
     function openStudentModal(mode) {
-      pendingMode = mode;
       document.getElementById('select-grade-mode').value = mode;
       updateClassOptions(mode);
       document.getElementById('student-modal').classList.add('animate-cartoon-pop');
@@ -579,7 +665,7 @@
     function showConfirmModal() {
       tempClass = document.getElementById('select-class').value;
       tempSeat = document.getElementById('select-seat').value;
-      document.getElementById('confirm-identity-text').innerText = `${tempClass} - ${tempSeat} 號`;
+      document.getElementById('confirm-identity-text').innerText = `${tempClass} -${tempSeat} 號`;
       closeStudentModal();
       document.getElementById('confirm-modal').classList.remove('hidden');
     }
@@ -604,7 +690,7 @@
     function openMonthlyModal() {
       if (!selectedClass || !selectedSeat) { promptStudentInfo('g2'); return; }
 
-      document.getElementById('monthly-student-info').innerText = `👤 冒險者身分：${selectedClass} - ${selectedSeat} 號`;
+      document.getElementById('monthly-student-info').innerText = `👤 冒險者身分：${selectedClass} -${selectedSeat} 號`;
       const container = document.getElementById('monthly-stats-list');
       container.innerHTML = `<div class="text-center py-8"><span class="text-3xl animate-spin inline-block">☁️</span><p class="text-xs font-black text-slate-500 mt-2">正在從雲端計算龍虎榜與戰績...</p></div>`;
       document.getElementById('monthly-stats-modal').classList.remove('hidden');
@@ -797,8 +883,8 @@
       document.getElementById('result-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
       document.getElementById('game-screen').classList.add('flex');
-      document.getElementById('mode-badge').innerText = mode === 'g2' ? '🖐️ 二年級：肌肉記憶' : '⚡ 三年級：極速短文';
-      document.getElementById('student-info-badge').innerText = `👤 ${selectedClass} - ${selectedSeat}`;
+      document.getElementById('mode-badge').innerText = mode === 'g2' ? '🖐️️ 二年級：肌肉記憶' : '⚡ 三年級：極速短文';
+      document.getElementById('student-info-badge').innerText = `👤 ${selectedClass} -${selectedSeat}`;
       
       const input = document.getElementById('type-input');
       input.value = ''; userTypedString = ''; input.disabled = false; input.focus();
@@ -912,8 +998,8 @@
 
     // 將按鍵監聽改為全域 document，實現「不用點擊輸入框也能直接打字」
     document.addEventListener('keydown', (e) => {
-      // 確保只在遊戲畫面中才攔截按鍵
-      if (document.getElementById('game-screen').classList.contains('hidden')) return;
+      // 確保只在遊戲畫面中才攔截按鍵，如果有打開測驗畫面則不攔截
+      if (document.getElementById('game-screen').classList.contains('hidden') || !document.getElementById('quiz-modal').classList.contains('hidden')) return;
       
       // 自動將焦點拉回輸入框，確保打字順暢且能彈出手機小鍵盤
       if (document.activeElement !== inputEl) {
@@ -1036,19 +1122,90 @@
       document.getElementById('live-errors').innerText = errorCount;
     }
 
+    // --- 修改遊戲結束流程：先測驗再結算 ---
     function endGame() {
       clearInterval(timerInterval);
       document.getElementById('type-input').disabled = true;
+      startQuiz(); // 開始指法測驗
+    }
 
+    function startQuiz() {
+      // 確保每次出題：1 題答案是「是」，1 題答案是「否」
+      const trueQs = shuffle(quizBank.filter(q => q.a === true));
+      const falseQs = shuffle(quizBank.filter(q => q.a === false));
+      
+      quizQuestions = shuffle([trueQs[0], falseQs[0]]);
+      
+      currentQuizIndex = 0;
+      quizBonus = 0;
+      
+      document.getElementById('quiz-modal').classList.remove('hidden');
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const qObj = quizQuestions[currentQuizIndex];
+      document.getElementById('quiz-title').innerText = `🧠 打字知識小測驗 (${currentQuizIndex + 1}/2)`;
+      document.getElementById('quiz-q-text').innerText = qObj.q;
+      
+      document.getElementById('quiz-options').classList.remove('hidden');
+      document.getElementById('quiz-result-box').classList.add('hidden');
+      document.getElementById('quiz-next-btn').classList.add('hidden');
+    }
+
+    function answerQuiz(isTrue) {
+      const qObj = quizQuestions[currentQuizIndex];
+      const isCorrect = (isTrue === qObj.a);
+      
+      document.getElementById('quiz-options').classList.add('hidden');
+      const resBox = document.getElementById('quiz-result-box');
+      resBox.classList.remove('hidden');
+      
+      if(isCorrect) {
+        quizBonus += 2;
+        resBox.innerHTML = `<div class="text-emerald-600 font-black text-xl mb-1 animate-pulse">🎉 答對了！積分 +2</div><div class="text-slate-700 text-sm font-bold">${qObj.exp}</div>`;
+      } else {
+        resBox.innerHTML = `<div class="text-rose-500 font-black text-xl mb-1">❌ 答錯了！</div><div class="text-slate-700 text-sm font-bold">${qObj.exp}</div>`;
+      }
+      
+      const btnText = (currentQuizIndex === 1) ? "查看最終戰報 🏆" : "下一題 ➡️";
+      const nextBtn = document.getElementById('quiz-next-btn');
+      nextBtn.innerText = btnText;
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuiz() {
+      currentQuizIndex++;
+      if(currentQuizIndex < 2) {
+        renderQuizQuestion();
+      } else {
+        document.getElementById('quiz-modal').classList.add('hidden');
+        finishGameAndSync(); // 測驗結束，進行原本的成績結算與上傳
+      }
+    }
+
+    // --- 最終結算與上傳 ---
+    function finishGameAndSync() {
       confetti({ particleCount: 120, spread: 100, origin: { y: 0.5 } });
 
       const finalWpm = Math.round((totalCorrectChars / 5) / 2);
+      
+      // 將測驗獲得的獎勵分數加入總分
+      score += quizBonus;
 
-      document.getElementById('res-student-id').innerText = `${selectedClass} - ${selectedSeat}`;
+      document.getElementById('res-student-id').innerText = `${selectedClass} -${selectedSeat}`;
       document.getElementById('res-score').innerText = score;
       document.getElementById('res-wpm').innerText = finalWpm;
       document.getElementById('res-max-combo').innerText = maxCombo;
       document.getElementById('res-errors').innerText = errorCount;
+      
+      // 顯示加分提示
+      const bonusTextEl = document.getElementById('res-bonus-text');
+      if(quizBonus > 0) {
+        bonusTextEl.innerText = `(包含測驗答對加 ${quizBonus} 分 ✨)`;
+      } else {
+        bonusTextEl.innerText = ``;
+      }
 
       // 遊戲結算後本地即時累加該學號的總分
       const oldTotal = getStoredTotalScore();
@@ -1083,6 +1240,8 @@
       syncToGoogleSheet(payload);
 
       updateRankUI();
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('flex');
       document.getElementById('result-screen').classList.remove('hidden');
     }
 
