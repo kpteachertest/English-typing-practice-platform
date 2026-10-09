@@ -328,9 +328,7 @@
         </button>
       </div>
 
-      <div id="quiz-result-box" class="hidden bg-slate-100 p-4 rounded-xl cartoon-box mb-4 min-h-[80px] flex flex-col justify-center">
-        <!-- JS 寫入答對/答錯與解析 -->
-      </div>
+      <div id="quiz-result-box" class="hidden bg-slate-100 p-4 rounded-xl cartoon-box mb-4 min-h-[80px] flex flex-col justify-center"></div>
       
       <button id="quiz-next-btn" onclick="nextQuiz()" class="hidden w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-black py-3 rounded-xl cartoon-btn text-lg mt-4">
         下一題 ➡️
@@ -604,7 +602,6 @@
       document.body.appendChild(script);
     }
 
-    // --- 修改處：在已經登錄身分時，阻擋跨年級點擊，並跳過選單 ---
     function promptStudentInfo(mode) {
       if (selectedClass && selectedSeat) {
         if (mode === 'g2' && selectedClass.startsWith('P3')) {
@@ -705,6 +702,11 @@
           let html = '';
           const r = res.rankings || {};
           const totalPlayersCount = (r.total && r.total.totalPlayers) ? r.total.totalPlayers : 0;
+          
+          // 修正判斷：分數為 0 或 rank 為未上榜時，明確顯示未上榜
+          const isRanked = r.total && r.total.rank !== "未上榜" && r.total.rank !== "--" && Number(r.total.score) > 0;
+          const displayRank = isRanked ? `第 ${r.total.rank} 名` : '未上榜';
+          const displayScore = r.total ? (r.total.score || 0) : 0;
 
           html += `
             <div class="bg-indigo-50 cartoon-box p-3.5 rounded-2xl mb-3 border-2 border-indigo-300">
@@ -715,8 +717,8 @@
               <div class="grid grid-cols-1 gap-2 text-center font-black">
                 <div class="bg-white p-2 rounded-xl border-2 border-slate-900">
                   <span class="text-[10px] text-slate-500 block">👑 總積分榜</span>
-                  <span class="text-base text-indigo-600">${r.total && r.total.rank !== "未上榜" ? '第 ' + r.total.rank + ' 名' : '未上榜'}</span>
-                  <span class="text-[9px] text-slate-400 block">${r.total ? r.total.score : 0} 分</span>
+                  <span class="text-base text-indigo-600">${displayRank}</span>
+                  <span class="text-[9px] text-slate-400 block">${displayScore} 分</span>
                 </div>
               </div>
             </div>
@@ -883,7 +885,7 @@
       document.getElementById('result-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
       document.getElementById('game-screen').classList.add('flex');
-      document.getElementById('mode-badge').innerText = mode === 'g2' ? '🖐️️ 二年級：肌肉記憶' : '⚡ 三年級：極速短文';
+      document.getElementById('mode-badge').innerText = mode === 'g2' ? '🖐️ 二年級：肌肉記憶' : '⚡ 三年級：極速短文';
       document.getElementById('student-info-badge').innerText = `👤 ${selectedClass} -${selectedSeat}`;
       
       const input = document.getElementById('type-input');
@@ -1130,7 +1132,6 @@
     }
 
     function startQuiz() {
-      // 確保每次出題：1 題答案是「是」，1 題答案是「否」
       const trueQs = shuffle(quizBank.filter(q => q.a === true));
       const falseQs = shuffle(quizBank.filter(q => q.a === false));
       
