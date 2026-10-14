@@ -402,7 +402,6 @@
   </div>
 
   <script>
-    // --- 防護機制：禁止右鍵與開發者工具 ---
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.addEventListener('keydown', function(e) {
       if (e.key === 'F12' || 
@@ -414,7 +413,6 @@
 
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrYxRMTVjEbpS23ajtqWJSsmFCHCAtlatDxapgwkGtVZupYhndao0YQK9knwyDK2Ry8Q/exec";
 
-    // --- 1. 設定基準時間與每月自動提升（通膨）率 ---
     const BASE_DATE = new Date(2026, 8, 1); 
     const INFLATION_RATE_PER_MONTH = 0.10; 
 
@@ -427,7 +425,6 @@
     const monthsPassed = getMonthsPassed();
     const scoreMultiplier = 1 + (monthsPassed * INFLATION_RATE_PER_MONTH);
 
-    // --- 2. 技能輔助函式 ---
     function applyInstantScore(pts) {
       score += pts;
       updateUI();
@@ -460,7 +457,6 @@
       }, secs * 1000);
     }
 
-    // --- 3. 擴充至 20000 分的基礎等級與技能設定 ---
     const BASE_RANKS = [
       { baseScore: 0, title: '打字新手', icon: '🐣', skillName: '無', skillDesc: '努力升級解鎖專屬技能！', skillAction: null },
       { baseScore: 100, title: '字母精靈', icon: '🧚', skillName: '精靈守護', skillDesc: '發動立即增加 10 積分', skillAction: () => applyInstantScore(10) },
@@ -490,7 +486,6 @@
     let tempClass = '';
     let tempSeat = '';
 
-    // --- 遊戲與技能全域變數 ---
     let currentQueue = [], currentMode = '', timeLeft = 120, timerInterval = null;
     let score = 0, completedCount = 0, totalCorrectChars = 0, errorCount = 0, combo = 0, maxCombo = 0;
     let currentArticleLines = [], currentLineIndex = 0, currentTarget = '', userTypedString = '';
@@ -501,12 +496,10 @@
     let isProtected = false;
     let skillTimeoutId = null;
     
-    // --- 測驗相關變數 ---
     let quizQuestions = [];
     let currentQuizIndex = 0;
     let quizBonus = 0;
 
-    // --- 指法是非題題庫 ---
     const quizBank = [
       { q: "英文字母 Q 鍵是由左手尾指負責輸入？", a: true, exp: "正確！上排的 Q 鍵由「左手尾指」負責。" },
       { q: "英文字母 W 鍵是由左手中指負責輸入？", a: false, exp: "錯囉！W 鍵是由「左手無名指」負責。" },
@@ -563,12 +556,14 @@
         identityText.innerText = `${selectedClass} -${selectedSeat} 號`;
         studentBar.classList.remove('hidden');
 
+        // 先以快取顯示
         const cachedWeeklyScore = localStorage.getItem(`cache_week_score_${selectedClass}_${selectedSeat}`) || '0';
         const cachedWeeklyWpm = localStorage.getItem(`cache_week_wpm_${selectedClass}_${selectedSeat}`) || '0';
         document.getElementById('home-week-score').innerText = `${cachedWeeklyScore} 分`;
         document.getElementById('home-week-wpm').innerText = `${cachedWeeklyWpm} WPM`;
 
         updateRankUI();
+        // 與雲端同步最新數據
         fetchHomeWeeklyStats();
       } else {
         studentBar.classList.add('hidden');
@@ -585,35 +580,31 @@
       document.getElementById('current-week-label').innerText = `📅 本週打字戰績`;
 
       const callbackName = 'handleHomeWeekly_' + Math.round(100000 * Math.random());
-      
-      const timeoutId = setTimeout(() => {
-        if (window[callbackName]) {
-          delete window[callbackName];
-          const scriptEl = document.getElementById(callbackName);
-          if (scriptEl) scriptEl.remove();
-        }
-      }, 3000);
 
       window[callbackName] = function(res) {
-        clearTimeout(timeoutId);
         delete window[callbackName];
         const scriptEl = document.getElementById(callbackName);
         if (scriptEl) scriptEl.remove();
 
         if (res && res.status === "success" && res.rankings) {
+          // 1. 每周戰績更新
           if (res.rankings.weekly) {
             const weekly = res.rankings.weekly;
-            const wScore = weekly.score || 0;
-            const wWpm = weekly.maxWpm || 0;
+            const wScore = Number(weekly.score) || 0;
+            const wWpm = Number(weekly.maxWpm) || 0;
             document.getElementById('home-week-score').innerText = `${wScore} 分`;
             document.getElementById('home-week-wpm').innerText = `${wWpm} WPM`;
             localStorage.setItem(`cache_week_score_${selectedClass}_${selectedSeat}`, wScore.toString());
             localStorage.setItem(`cache_week_wpm_${selectedClass}_${selectedSeat}`, wWpm.toString());
           }
           
+          // 2. 總龍虎榜累積積分更新
           if (res.rankings.total && typeof res.rankings.total.score !== 'undefined') {
-            const cloudTotal = res.rankings.total.score;
-            localStorage.setItem(`user_total_score_${selectedClass}_${selectedSeat}`, cloudTotal.toString());
+            const cloudTotal = Number(res.rankings.total.score) || 0;
+            const localTotal = getStoredTotalScore();
+            // 雲端大於 0 則精準更新為試算表最新值；否則保留本機記錄
+            const actualTotal = cloudTotal > 0 ? cloudTotal : localTotal;
+            localStorage.setItem(`user_total_score_${selectedClass}_${selectedSeat}`, actualTotal.toString());
             updateRankUI();
           }
         }
@@ -621,9 +612,9 @@
 
       const script = document.createElement('script');
       script.id = callbackName;
-      script.src = `${GOOGLE_SCRIPT_URL}?className=${encodeURIComponent(selectedClass)}&seat=${encodeURIComponent(selectedSeat)}&type=summary&callback=${callbackName}`;
+      // 請求數據
+      script.src = `${GOOGLE_SCRIPT_URL}?className=${encodeURIComponent(selectedClass)}&seat=${encodeURIComponent(selectedSeat)}&callback=${callbackName}`;
       script.onerror = function() { 
-        clearTimeout(timeoutId);
         delete window[callbackName]; 
       };
       document.body.appendChild(script);
@@ -800,7 +791,6 @@
 
     function closeMonthlyModal() { document.getElementById('monthly-stats-modal').classList.add('hidden'); }
 
-    // --- 教材題庫 (Ready Vocab 2A & 3A) ---
     const g2MasterBank = [
       ["bank cake shop cinema clinic"],
       ["fire station park police station"],
@@ -1058,6 +1048,7 @@
 
     const inputEl = document.getElementById('type-input');
 
+    // 鍵盤監聽：防刷分機制（打對不給退，打錯可退，同字不重複加分）
     document.addEventListener('keydown', (e) => {
       if (document.getElementById('game-screen').classList.contains('hidden') || !document.getElementById('quiz-modal').classList.contains('hidden')) return;
       
@@ -1424,7 +1415,6 @@
       }
     }
 
-    // 頁面載入時執行初始化
     checkStudentIdentity();
   </script>
 </body>
