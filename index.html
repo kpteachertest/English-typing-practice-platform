@@ -98,24 +98,35 @@
 <body class="font-sans h-screen w-screen flex flex-col items-center justify-center p-2 sm:p-4 select-none overflow-hidden relative">
 
   <!-- 1. 首頁 -->
-  <div id="welcome-screen" class="text-center bg-white p-6 sm:p-8 rounded-3xl cartoon-box w-full max-w-xl my-auto animate-cartoon-pop relative z-20">
+  <div id="welcome-screen" class="text-center bg-white p-5 sm:p-7 rounded-3xl cartoon-box w-full max-w-xl my-auto animate-cartoon-pop relative z-20">
     
     <!-- 📅 當週戰績摘要卡 -->
-    <div class="bg-gradient-to-br from-pink-200 to-rose-200 rounded-2xl p-4 mb-4 cartoon-box border-4 border-slate-900 shadow-[0_0_15px_rgba(244,63,94,0.4)] transform hover:scale-[1.02] transition-transform">
-      <div class="flex justify-between items-center pb-2 mb-3 border-b-4 border-slate-900 text-sm sm:text-base font-black text-slate-800">
-        <span id="current-week-label" class="text-rose-700 drop-shadow-sm text-lg">📅 本週打字戰績</span>
-        <span class="text-xs text-slate-600 bg-white px-2 py-1 rounded-full border-2 border-slate-900">雲端同步</span>
+    <div class="bg-gradient-to-br from-pink-200 to-rose-200 rounded-2xl p-3.5 sm:p-4 mb-2.5 cartoon-box border-4 border-slate-900 shadow-[0_0_15px_rgba(244,63,94,0.4)] transform hover:scale-[1.01] transition-transform">
+      <div class="flex justify-between items-center pb-2 mb-2.5 border-b-4 border-slate-900 text-sm sm:text-base font-black text-slate-800">
+        <div>
+          <span id="current-week-label" class="text-rose-700 drop-shadow-sm text-base sm:text-lg">📅 本週打字戰績</span>
+          <span id="current-week-range" class="text-[11px] sm:text-xs text-slate-600 block sm:inline-block sm:ml-2 font-bold"></span>
+        </div>
+        <span class="text-xs text-slate-600 bg-white px-2 py-0.5 rounded-full border-2 border-slate-900 flex-shrink-0">雲端同步</span>
       </div>
       <div class="grid grid-cols-2 gap-3">
-        <div class="bg-white p-3 rounded-xl border-4 border-slate-900 text-left">
-          <span class="text-xs sm:text-sm text-slate-500 font-black block mb-1">⭐ 本週獲得積分</span>
-          <span id="home-week-score" class="text-3xl sm:text-4xl font-black text-rose-600 drop-shadow">0 分</span>
+        <div class="bg-white p-2.5 sm:p-3 rounded-xl border-4 border-slate-900 text-left">
+          <span class="text-xs sm:text-sm text-slate-500 font-black block mb-0.5">⭐ 本週獲得積分</span>
+          <span id="home-week-score" class="text-2xl sm:text-4xl font-black text-rose-600 drop-shadow">0 分</span>
         </div>
-        <div class="bg-white p-3 rounded-xl border-4 border-slate-900 text-left">
-          <span class="text-xs sm:text-sm text-slate-500 font-black block mb-1">⚡ 本週最快速度</span>
-          <span id="home-week-wpm" class="text-3xl sm:text-4xl font-black text-emerald-600 drop-shadow">0 WPM</span>
+        <div class="bg-white p-2.5 sm:p-3 rounded-xl border-4 border-slate-900 text-left">
+          <span class="text-xs sm:text-sm text-slate-500 font-black block mb-0.5">⚡ 本週最快速度</span>
+          <span id="home-week-wpm" class="text-2xl sm:text-4xl font-black text-emerald-600 drop-shadow">0 WPM</span>
         </div>
       </div>
+    </div>
+
+    <!-- 📢 網絡延遲與數據安心提示卡片 -->
+    <div class="bg-amber-50 border-2 border-amber-400 text-amber-900 px-3 py-1.5 rounded-xl mb-3 text-left flex items-center space-x-2 shadow-sm">
+      <span class="text-base flex-shrink-0">📢</span>
+      <p class="text-[11px] sm:text-xs font-black leading-tight">
+        網絡速度較慢時記錄可能短暫未顯示，但<span class="text-rose-600 font-black">打字記錄一定會儲存於雲端</span>，請不用擔心！
+      </p>
     </div>
 
     <!-- 學生身分狀態欄 -->
@@ -127,7 +138,7 @@
     </div>
 
     <!-- 🌟 冒險者等級與進化形態 -->
-    <div class="bg-amber-100 rounded-2xl p-3 mb-4 cartoon-box relative overflow-hidden">
+    <div class="bg-amber-100 rounded-2xl p-3 mb-3.5 cartoon-box relative overflow-hidden">
       <div class="text-[11px] sm:text-xs font-black text-slate-600 uppercase tracking-wider mb-2">🌟 累積總積分與進化形態</div>
       <div class="flex items-center justify-center space-x-4 mb-2">
         <div id="avatar-container" class="text-4xl sm:text-5xl bg-white p-2 rounded-xl cartoon-box">
@@ -147,27 +158,30 @@
       <div class="text-[10px] text-slate-700 mt-1.5 font-black" id="next-rank-info">載入中...</div>
     </div>
 
-    <h1 class="text-2xl sm:text-4xl font-black text-indigo-600 mb-2 tracking-wide drop-shadow-[2px_2px_0px_#0f172a]">🎮 2分鐘打字大冒險</h1>
-    <p class="text-xs sm:text-sm text-slate-600 mb-4 font-black">請選擇冒險關卡：</p>
+    <h1 class="text-2xl sm:text-4xl font-black text-indigo-600 mb-1.5 tracking-wide drop-shadow-[2px_2px_0px_#0f172a]">🎮 2分鐘打字大冒險</h1>
+    <p class="text-xs sm:text-sm text-slate-600 mb-3.5 font-black">請選擇冒險關卡：</p>
 
-    <div class="space-y-3">
-      <button onclick="promptStudentInfo('g2')" class="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black text-lg sm:text-xl py-3 rounded-2xl cartoon-btn flex items-center justify-center space-x-2">
+    <div class="space-y-2.5">
+      <button onclick="promptStudentInfo('g2')" class="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black text-lg sm:text-xl py-2.5 sm:py-3 rounded-2xl cartoon-btn flex items-center justify-center space-x-2">
         <span>🖐️ 二年級：肌肉記憶關卡</span>
       </button>
 
-      <button onclick="promptStudentInfo('g3')" class="w-full bg-purple-400 hover:bg-purple-300 text-slate-900 font-black text-lg sm:text-xl py-3 rounded-2xl cartoon-btn flex items-center justify-center space-x-2">
+      <button onclick="promptStudentInfo('g3')" class="w-full bg-purple-400 hover:bg-purple-300 text-slate-900 font-black text-lg sm:text-xl py-2.5 sm:py-3 rounded-2xl cartoon-btn flex items-center justify-center space-x-2">
         <span>📖 三年級：極速短文挑戰</span>
       </button>
 
-      <div class="grid grid-cols-3 gap-2 pt-1">
-        <button onclick="openMonthlyModal()" class="bg-emerald-300 hover:bg-emerald-200 text-slate-900 font-black py-2.5 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
-          <span>🏆 龍虎榜排名</span>
+      <div class="grid grid-cols-4 gap-2 pt-1">
+        <button onclick="openWeeklyHistoryModal()" class="bg-teal-300 hover:bg-teal-200 text-slate-900 font-black py-2 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
+          <span>📅 每週記錄</span>
         </button>
-        <button onclick="openBadgeModal()" class="bg-sky-300 hover:bg-sky-200 text-slate-900 font-black py-2.5 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
-          <span>🏅 勳章與技能</span>
+        <button onclick="openMonthlyModal()" class="bg-emerald-300 hover:bg-emerald-200 text-slate-900 font-black py-2 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
+          <span>🏆 龍虎榜</span>
         </button>
-        <button onclick="openHistoryModal()" class="bg-orange-300 hover:bg-orange-200 text-slate-900 font-black py-2.5 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
-          <span>📜 歷史戰報</span>
+        <button onclick="openBadgeModal()" class="bg-sky-300 hover:bg-sky-200 text-slate-900 font-black py-2 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
+          <span>🏅 勳章</span>
+        </button>
+        <button onclick="openHistoryModal()" class="bg-orange-300 hover:bg-orange-200 text-slate-900 font-black py-2 rounded-2xl cartoon-btn text-xs sm:text-sm flex items-center justify-center space-x-1">
+          <span>📜 歷史</span>
         </button>
       </div>
     </div>
@@ -217,6 +231,35 @@
         <button onclick="backToSelectModal()" class="bg-rose-300 hover:bg-rose-200 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">✏️ 修改身份</button>
         <button onclick="confirmStudentAndStart()" class="bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black py-2.5 px-3 rounded-xl cartoon-btn text-xs">🚀 開始遊戲！</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 📅 每週打字戰績查閱 Modal -->
+  <div id="weekly-history-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 z-50">
+    <div class="bg-white p-4 sm:p-6 rounded-3xl cartoon-box max-w-lg w-full flex flex-col max-h-[90vh] animate-cartoon-pop">
+      <div class="flex justify-between items-center pb-2 border-b-4 border-slate-900 mb-2">
+        <div>
+          <h3 class="text-xl sm:text-2xl font-black text-slate-900">📅 每週打字戰績查閱</h3>
+          <p id="weekly-modal-subtitle" class="text-xs text-indigo-700 font-black mt-0.5"></p>
+        </div>
+        <button onclick="closeWeeklyHistoryModal()" class="text-slate-900 text-2xl font-black hover:text-rose-600 transition">&times;</button>
+      </div>
+
+      <div id="weekly-task-target-banner" class="bg-amber-100 p-2.5 rounded-xl border-2 border-slate-900 text-xs font-black text-slate-800 flex justify-between items-center mb-3">
+        <span>🎯 本週打字任務目標：<span id="target-score-text" class="text-indigo-700 font-black">--</span> 分</span>
+        <span id="current-week-rank-tag" class="bg-white px-2 py-0.5 rounded-full border border-slate-900 text-rose-600 font-black"></span>
+      </div>
+
+      <div id="weekly-history-list" class="overflow-y-auto space-y-2.5 pr-1 flex-1 custom-scrollbar">
+        <div class="text-center py-10 font-black text-slate-400">
+          <span class="text-3xl animate-spin inline-block">☁️</span>
+          <p class="mt-2 text-xs">正在從雲端載入歷週打字戰績...</p>
+        </div>
+      </div>
+
+      <button onclick="closeWeeklyHistoryModal()" class="mt-3 w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-black py-2.5 rounded-2xl cartoon-btn text-sm">
+        返回選單
+      </button>
     </div>
   </div>
 
@@ -382,17 +425,20 @@
     </div>
   </div>
 
-  <!-- 5. 歷史戰報 Modal -->
+  <!-- 5. 歷史戰報 Modal (只查閱自己身份的紀錄) -->
   <div id="history-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="bg-white p-5 rounded-3xl cartoon-box max-w-xl w-full flex flex-col max-h-[85vh] animate-cartoon-pop">
-      <div class="flex justify-between items-center pb-2 border-b-4 border-slate-900 mb-3">
-        <h3 class="text-xl font-black text-slate-900">📜 戰場歷史戰報</h3>
+      <div class="flex justify-between items-center pb-2 border-b-4 border-slate-900 mb-1">
+        <h3 class="text-xl font-black text-slate-900">📜 個人戰場歷史戰報</h3>
         <button onclick="closeHistoryModal()" class="text-slate-900 text-2xl font-black">&times;</button>
       </div>
+      <p id="history-modal-subtitle" class="text-xs text-indigo-700 font-black mb-3 pb-1 border-b-2 border-slate-200"></p>
+      
       <div id="history-list" class="overflow-y-auto space-y-2.5 pr-1 flex-1 custom-scrollbar"></div>
+      
       <div class="pt-3 border-t-4 border-slate-900 flex justify-between items-center mt-3">
         <button onclick="clearHistory()" class="bg-rose-400 hover:bg-rose-300 text-slate-900 font-black px-3 py-1.5 rounded-xl cartoon-btn text-xs">
-          🗑️ 清除紀錄
+          🗑️ 清除本人紀錄
         </button>
         <button onclick="closeHistoryModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-900 font-black px-5 py-1.5 rounded-xl cartoon-btn text-xs">
           關閉
@@ -457,22 +503,25 @@
       }, secs * 1000);
     }
 
+    // =========================================================================
+    // 🌟 平衡調校後的技能榜：大幅調低直接加分技能，增強過程增益
+    // =========================================================================
     const BASE_RANKS = [
       { baseScore: 0, title: '打字新手', icon: '🐣', skillName: '無', skillDesc: '努力升級解鎖專屬技能！', skillAction: null },
-      { baseScore: 100, title: '字母精靈', icon: '🧚', skillName: '精靈守護', skillDesc: '發動立即增加 10 積分', skillAction: () => applyInstantScore(10) },
-      { baseScore: 300, title: '單字獵人', icon: '🏹', skillName: '精準射擊', skillDesc: '發動立即增加 30 積分', skillAction: () => applyInstantScore(30) },
-      { baseScore: 600, title: '鍵盤騎士', icon: '⚔️', skillName: '騎士衝鋒', skillDesc: '10秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 10) },
-      { baseScore: 1000, title: '疾速法師', icon: '🧙', skillName: '時間魔法', skillDesc: '發動立即增加 10 秒遊戲時間', skillAction: () => applyTime(10) },
-      { baseScore: 1800, title: '打字霸主', icon: '🐉', skillName: '龍之吐息', skillDesc: '發動立即增加 80 積分', skillAction: () => applyInstantScore(80) },
-      { baseScore: 2800, title: '神級打字王', icon: '👑', skillName: '王者加冕', skillDesc: '15秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 15) },
-      { baseScore: 4000, title: '超級賽亞人', icon: '🌟', skillName: '賽亞人變身', skillDesc: '10秒內得分三倍 (x3) 狂飆', skillAction: () => applyMultiplier(3, 10) },
-      { baseScore: 5500, title: '銀河打字巨神', icon: '🌌', skillName: '銀河流星', skillDesc: '發動立即增加 150 積分', skillAction: () => applyInstantScore(150) },
-      { baseScore: 7000, title: '終極打字天尊', icon: '⚡', skillName: '天雷護體', skillDesc: '15秒內無敵(打錯不扣分中斷)且得分x2', skillAction: () => applyProtection(2, 15) },
-      { baseScore: 8500, title: '宇宙無敵王者', icon: '🪐', skillName: '宇宙爆發', skillDesc: '發動立即增加 15 秒遊戲時間', skillAction: () => applyTime(15) },
-      { baseScore: 10000, title: '萬分傳奇主宰', icon: '🎆', skillName: '傳奇降臨', skillDesc: '發動立即增加 300 積分', skillAction: () => applyInstantScore(300) },
-      { baseScore: 13000, title: '時空星辰行者', icon: '🌠', skillName: '星辰之力', skillDesc: '20秒內打字得分三倍 (x3)', skillAction: () => applyMultiplier(3, 20) },
-      { baseScore: 16000, title: '混沌破壞魔神', icon: '☄️', skillName: '混沌重塑', skillDesc: '增加 20 秒時間，且立即加 100 積分', skillAction: () => { applyTime(20); setTimeout(() => applyInstantScore(100), 500); } },
-      { baseScore: 20000, title: '創世打字之神', icon: '👁️', skillName: '神之制裁', skillDesc: '無敵防護且得分x3(20秒)，立即加 200 分！', skillAction: () => { applyProtection(3, 20); setTimeout(() => applyInstantScore(200), 500); } }
+      { baseScore: 100, title: '字母精靈', icon: '🧚', skillName: '精靈守護', skillDesc: '發動立即增加 5 積分', skillAction: () => applyInstantScore(5) },
+      { baseScore: 300, title: '單字獵人', icon: '🏹', skillName: '精準射擊', skillDesc: '發動立即增加 10 積分', skillAction: () => applyInstantScore(10) },
+      { baseScore: 600, title: '鍵盤騎士', icon: '⚔️', skillName: '騎士衝鋒', skillDesc: '6 秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 6) },
+      { baseScore: 1000, title: '疾速法師', icon: '🧙', skillName: '時間魔法', skillDesc: '發動立即增加 6 秒遊戲時間', skillAction: () => applyTime(6) },
+      { baseScore: 1800, title: '打字霸主', icon: '🐉', skillName: '龍之吐息', skillDesc: '發動立即增加 15 積分', skillAction: () => applyInstantScore(15) },
+      { baseScore: 2800, title: '神級打字王', icon: '👑', skillName: '王者加冕', skillDesc: '8 秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 8) },
+      { baseScore: 4000, title: '超級賽亞人', icon: '🌟', skillName: '賽亞人變身', skillDesc: '5 秒內得分雙倍 (x2) 且增加 5 積分', skillAction: () => { applyMultiplier(2, 5); applyInstantScore(5); } },
+      { baseScore: 5500, title: '銀河打字巨神', icon: '🌌', skillName: '銀河流星', skillDesc: '發動立即增加 20 積分', skillAction: () => applyInstantScore(20) },
+      { baseScore: 7000, title: '終極打字天尊', icon: '⚡', skillName: '天雷護體', skillDesc: '8 秒內無敵防護(打錯不扣分中斷)', skillAction: () => applyProtection(1, 8) },
+      { baseScore: 8500, title: '宇宙無敵王者', icon: '🪐', skillName: '宇宙爆發', skillDesc: '發動立即增加 8 秒遊戲時間', skillAction: () => applyTime(8) },
+      { baseScore: 10000, title: '萬分傳奇主宰', icon: '🎆', skillName: '傳奇降臨', skillDesc: '發動立即增加 25 積分', skillAction: () => applyInstantScore(25) },
+      { baseScore: 13000, title: '時空星辰行者', icon: '🌠', skillName: '星辰之力', skillDesc: '10 秒內打字得分雙倍 (x2)', skillAction: () => applyMultiplier(2, 10) },
+      { baseScore: 16000, title: '混沌破壞魔神', icon: '☄️', skillName: '混沌重塑', skillDesc: '增加 6 秒時間，且立即加 15 積分', skillAction: () => { applyTime(6); setTimeout(() => applyInstantScore(15), 300); } },
+      { baseScore: 20000, title: '創世打字之神', icon: '👁️', skillName: '神之制裁', skillDesc: '8 秒內無敵得分x2，且立即加 30 積分', skillAction: () => { applyProtection(2, 8); setTimeout(() => applyInstantScore(30), 300); } }
     ];
 
     const RANKS = BASE_RANKS.map(rank => {
@@ -533,14 +582,39 @@
       { q: "空白鍵(Space)是由尾指負責輸入？", a: false, exp: "錯囉！空白鍵是由「大拇指」負責的喔。" }
     ];
 
-    function calculateWeek(dateObj) {
-      const startDay = new Date(2026, 7, 31); 
+    // 每週週次與起止日期計算 (基準日 2026/08/31 週一)
+    const SEMESTER_START_DATE = new Date(2026, 7, 31); 
+
+    function getWeekNumber(dateObj) {
       const current = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
-      const diffTime = current - startDay;
+      const diffTime = current - SEMESTER_START_DATE;
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays < 0) return "Week 1";
-      const weekNum = Math.floor(diffDays / 7) + 1;
-      return `Week ${weekNum}`;
+      if (diffDays < 0) return 1;
+      return Math.floor(diffDays / 7) + 1;
+    }
+
+    function calculateWeek(dateObj) {
+      return `Week ${getWeekNumber(dateObj)}`;
+    }
+
+    function formatShortDate(d) {
+      const m = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      return `${d.getFullYear()}/${m}/${day}`;
+    }
+
+    function getWeekDateRange(weekNum) {
+      const startDate = new Date(SEMESTER_START_DATE.getTime());
+      startDate.setDate(startDate.getDate() + (weekNum - 1) * 7);
+      
+      const endDate = new Date(startDate.getTime());
+      endDate.setDate(endDate.getDate() + 6);
+      
+      return {
+        start: startDate,
+        end: endDate,
+        rangeText: `${formatShortDate(startDate)} ~ ${formatShortDate(endDate)}`
+      };
     }
 
     function getStoredTotalScore() {
@@ -548,36 +622,42 @@
       return parseInt(localStorage.getItem(`user_total_score_${selectedClass}_${selectedSeat}`) || '0', 10);
     }
 
+    function getWeeklyTargetScore() {
+      return (selectedClass && selectedClass.startsWith('P3')) ? 300 : 200;
+    }
+
     function checkStudentIdentity() {
       const studentBar = document.getElementById('current-student-bar');
       const identityText = document.getElementById('display-student-identity');
 
+      const now = new Date();
+      const currentWeekNum = getWeekNumber(now);
+      const currentRange = getWeekDateRange(currentWeekNum);
+      document.getElementById('current-week-label').innerText = `📅 本週戰績 (Week ${currentWeekNum})`;
+      document.getElementById('current-week-range').innerText = `【${currentRange.rangeText}】`;
+
       if (selectedClass && selectedSeat) {
-        identityText.innerText = `${selectedClass} -${selectedSeat} 號`;
+        identityText.innerText = `${selectedClass} - ${selectedSeat} 號`;
         studentBar.classList.remove('hidden');
 
-        // 先以快取顯示
         const cachedWeeklyScore = localStorage.getItem(`cache_week_score_${selectedClass}_${selectedSeat}`) || '0';
         const cachedWeeklyWpm = localStorage.getItem(`cache_week_wpm_${selectedClass}_${selectedSeat}`) || '0';
         document.getElementById('home-week-score').innerText = `${cachedWeeklyScore} 分`;
         document.getElementById('home-week-wpm').innerText = `${cachedWeeklyWpm} WPM`;
 
         updateRankUI();
-        // 與雲端同步最新數據
         fetchHomeWeeklyStats();
       } else {
         studentBar.classList.add('hidden');
         document.getElementById('home-week-score').innerText = '0 分';
         document.getElementById('home-week-wpm').innerText = '0 WPM';
-        document.getElementById('current-week-label').innerText = '📅 本週打字戰績 (請先登錄身分)';
+        document.getElementById('current-week-label').innerText = `📅 本週打字戰績 (Week ${currentWeekNum})`;
         updateRankUI();
       }
     }
 
     function fetchHomeWeeklyStats() {
       if (!selectedClass || !selectedSeat) return;
-
-      document.getElementById('current-week-label').innerText = `📅 本週打字戰績`;
 
       const callbackName = 'handleHomeWeekly_' + Math.round(100000 * Math.random());
 
@@ -587,7 +667,6 @@
         if (scriptEl) scriptEl.remove();
 
         if (res && res.status === "success" && res.rankings) {
-          // 1. 每周戰績更新
           if (res.rankings.weekly) {
             const weekly = res.rankings.weekly;
             const wScore = Number(weekly.score) || 0;
@@ -596,13 +675,14 @@
             document.getElementById('home-week-wpm').innerText = `${wWpm} WPM`;
             localStorage.setItem(`cache_week_score_${selectedClass}_${selectedSeat}`, wScore.toString());
             localStorage.setItem(`cache_week_wpm_${selectedClass}_${selectedSeat}`, wWpm.toString());
+            if (weekly.rank) {
+              localStorage.setItem(`cache_week_rank_${selectedClass}_${selectedSeat}`, String(weekly.rank));
+            }
           }
           
-          // 2. 總龍虎榜累積積分更新
           if (res.rankings.total && typeof res.rankings.total.score !== 'undefined') {
             const cloudTotal = Number(res.rankings.total.score) || 0;
             const localTotal = getStoredTotalScore();
-            // 雲端大於 0 則精準更新為試算表最新值；否則保留本機記錄
             const actualTotal = cloudTotal > 0 ? cloudTotal : localTotal;
             localStorage.setItem(`user_total_score_${selectedClass}_${selectedSeat}`, actualTotal.toString());
             updateRankUI();
@@ -612,12 +692,132 @@
 
       const script = document.createElement('script');
       script.id = callbackName;
-      // 請求數據
       script.src = `${GOOGLE_SCRIPT_URL}?className=${encodeURIComponent(selectedClass)}&seat=${encodeURIComponent(selectedSeat)}&callback=${callbackName}`;
       script.onerror = function() { 
         delete window[callbackName]; 
       };
       document.body.appendChild(script);
+    }
+
+    // 每週打字戰績查閱視窗
+    function openWeeklyHistoryModal() {
+      if (!selectedClass || !selectedSeat) {
+        promptStudentInfo('g2');
+        return;
+      }
+
+      const now = new Date();
+      const currentWeekNum = getWeekNumber(now);
+      const targetScore = getWeeklyTargetScore();
+
+      document.getElementById('weekly-modal-subtitle').innerText = `冒險者：${selectedClass} - ${selectedSeat} 號 ｜ 目前為 Week ${currentWeekNum}`;
+      document.getElementById('target-score-text').innerText = `${targetScore}`;
+
+      const container = document.getElementById('weekly-history-list');
+      container.innerHTML = `
+        <div class="text-center py-10 font-black text-slate-400">
+          <span class="text-3xl animate-spin inline-block">☁️</span>
+          <p class="mt-2 text-xs">正在從雲端試算表載入歷週真實戰績...</p>
+        </div>
+      `;
+
+      document.getElementById('weekly-history-modal').classList.remove('hidden');
+
+      const callbackName = 'handleWeeklyAll_' + Math.round(100000 * Math.random());
+
+      window[callbackName] = function(res) {
+        delete window[callbackName];
+        const scriptEl = document.getElementById(callbackName);
+        if (scriptEl) scriptEl.remove();
+
+        var weeklyDataMap = {};
+        var currentWeekRank = "未上榜";
+
+        if (res && res.status === "success") {
+          weeklyDataMap = res.weeklyAll || {};
+          if (res.rankings && res.rankings.weekly && res.rankings.weekly.rank) {
+            currentWeekRank = res.rankings.weekly.rank;
+          }
+        }
+
+        document.getElementById('current-week-rank-tag').innerText = `👑 本週排行：第 ${currentWeekRank} 名`;
+
+        let html = '';
+
+        for (let w = currentWeekNum; w >= 1; w--) {
+          const weekTag = `Week ${w}`;
+          const range = getWeekDateRange(w);
+          const isCurrentWeek = (w === currentWeekNum);
+
+          let weekScore = 0;
+          let weekWpm = 0;
+          let weekCount = 0;
+
+          if (weeklyDataMap[weekTag]) {
+            weekScore = Number(weeklyDataMap[weekTag].score) || 0;
+            weekWpm = Number(weeklyDataMap[weekTag].maxWpm) || 0;
+            weekCount = Number(weeklyDataMap[weekTag].count) || 0;
+          }
+
+          if (isCurrentWeek && weekScore === 0) {
+            weekScore = parseInt(localStorage.getItem(`cache_week_score_${selectedClass}_${selectedSeat}`) || '0', 10);
+            weekWpm = parseInt(localStorage.getItem(`cache_week_wpm_${selectedClass}_${selectedSeat}`) || '0', 10);
+          }
+
+          const isAchieved = weekScore >= targetScore;
+          const diffScore = targetScore - weekScore;
+          const progressPct = Math.min(100, Math.round((weekScore / targetScore) * 100));
+
+          html += `
+            <div class="p-3 sm:p-3.5 rounded-2xl cartoon-box ${isCurrentWeek ? 'bg-amber-100 border-amber-500 shadow-md' : 'bg-slate-50'} flex flex-col space-y-2 transition-all">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                  <span class="text-base sm:text-lg font-black text-slate-900">${weekTag}</span>
+                  ${isCurrentWeek ? '<span class="bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-black">進行中</span>' : ''}
+                  ${isCurrentWeek ? `<span class="bg-indigo-100 text-indigo-700 text-[10px] px-2 py-0.5 rounded-full font-black border border-indigo-300">👑 本週第 ${currentWeekRank} 名</span>` : ''}
+                </div>
+                <div>
+                  ${isAchieved 
+                    ? '<span class="bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-full font-black shadow-sm">✅ 任務完成</span>' 
+                    : `<span class="bg-rose-100 text-rose-700 border border-rose-300 text-xs px-2 py-0.5 rounded-full font-black">⏳ 還差 ${diffScore} 分達標</span>`}
+                </div>
+              </div>
+
+              <div class="flex justify-between items-center text-xs text-slate-500 font-black">
+                <span>🗓️ ${range.rangeText}</span>
+                <span>${weekCount > 0 ? '挑戰次數：' + weekCount + ' 次' : ''}</span>
+              </div>
+
+              <div class="w-full bg-slate-200 rounded-full h-2 border border-slate-400 overflow-hidden">
+                <div class="${isAchieved ? 'bg-emerald-500' : 'bg-amber-500'} h-full rounded-full transition-all duration-300" style="width: ${progressPct}%"></div>
+              </div>
+
+              <div class="flex justify-between items-baseline pt-1 border-t border-slate-200">
+                <span class="text-xs font-black text-slate-600">達成率：${progressPct}% (${weekScore}/${targetScore}分)</span>
+                <div>
+                  <span class="text-xl sm:text-2xl font-black text-rose-600">${weekScore}</span> <span class="text-xs text-slate-400 font-black">分</span>
+                  <span class="text-xs text-emerald-600 font-black ml-2">⚡ 最快 ${weekWpm} WPM</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+      };
+
+      const script = document.createElement('script');
+      script.id = callbackName;
+      script.src = `${GOOGLE_SCRIPT_URL}?className=${encodeURIComponent(selectedClass)}&seat=${encodeURIComponent(selectedSeat)}&type=weekly_all&callback=${callbackName}`;
+      script.onerror = function() {
+        delete window[callbackName];
+        container.innerHTML = `<div class="text-center py-8 font-black text-rose-500">❌ 雲端戰績載入失敗，請檢查網路連線</div>`;
+      };
+      document.body.appendChild(script);
+    }
+
+    function closeWeeklyHistoryModal() {
+      document.getElementById('weekly-history-modal').classList.add('hidden');
     }
 
     function promptStudentInfo(mode) {
@@ -634,7 +834,7 @@
         pendingMode = mode;
         tempClass = selectedClass;
         tempSeat = selectedSeat;
-        document.getElementById('confirm-identity-text').innerText = `${tempClass} -${tempSeat} 號`;
+        document.getElementById('confirm-identity-text').innerText = `${tempClass} - ${tempSeat} 號`;
         document.getElementById('confirm-modal').classList.remove('hidden');
         return;
       }
@@ -680,7 +880,7 @@
     function showConfirmModal() {
       tempClass = document.getElementById('select-class').value;
       tempSeat = document.getElementById('select-seat').value;
-      document.getElementById('confirm-identity-text').innerText = `${tempClass} -${tempSeat} 號`;
+      document.getElementById('confirm-identity-text').innerText = `${tempClass} - ${tempSeat} 號`;
       closeStudentModal();
       document.getElementById('confirm-modal').classList.remove('hidden');
     }
@@ -705,7 +905,7 @@
     function openMonthlyModal() {
       if (!selectedClass || !selectedSeat) { promptStudentInfo('g2'); return; }
 
-      document.getElementById('summary-identity').innerText = `${selectedClass} -${selectedSeat} 號`;
+      document.getElementById('summary-identity').innerText = `${selectedClass} - ${selectedSeat} 號`;
       document.getElementById('summary-rank').innerText = "載入中...";
       
       const container = document.getElementById('monthly-stats-list');
@@ -755,7 +955,7 @@
               <div id="${isSelf ? 'my-rank-row' : ''}" class="grid grid-cols-12 items-center p-2 text-xs sm:text-sm text-center ${rowStyle} transition-colors">
                 <span class="col-span-2 font-black ${item.rank <= 3 ? 'text-amber-600 text-sm sm:text-base' : 'text-slate-700'}">${rankBadge}</span>
                 <span class="col-span-4 flex items-center justify-center space-x-1">
-                  <span>${item.className} -${item.seat}號</span>
+                  <span>${item.className} - ${item.seat}號</span>
                   ${isSelf ? '<span class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">我</span>' : ''}
                 </span>
                 <span class="col-span-3 text-right font-black text-indigo-600">${item.score} <span class="text-[10px] text-slate-400">分</span></span>
@@ -935,7 +1135,7 @@
       document.getElementById('game-screen').classList.remove('hidden');
       document.getElementById('game-screen').classList.add('flex');
       document.getElementById('mode-badge').innerText = mode === 'g2' ? '🖐️ 二年級：肌肉記憶' : '⚡ 三年級：極速短文';
-      document.getElementById('student-info-badge').innerText = `👤 ${selectedClass} -${selectedSeat}`;
+      document.getElementById('student-info-badge').innerText = `👤 ${selectedClass} - ${selectedSeat}`;
       
       const input = document.getElementById('type-input');
       input.value = ''; userTypedString = ''; input.disabled = false; input.focus();
@@ -1257,7 +1457,7 @@
       const finalWpm = Math.round((totalCorrectChars / 5) / 2);
       score += quizBonus;
 
-      document.getElementById('res-student-id').innerText = `${selectedClass} -${selectedSeat}`;
+      document.getElementById('res-student-id').innerText = `${selectedClass} - ${selectedSeat}`;
       document.getElementById('res-score').innerText = score;
       document.getElementById('res-wpm').innerText = finalWpm;
       document.getElementById('res-max-combo').innerText = maxCombo;
@@ -1378,14 +1578,26 @@
 
     function closeBadgeModal() { document.getElementById('badge-modal').classList.add('hidden'); }
 
+    // 歷史戰報：僅展示當前登錄學生的戰報紀錄
     function openHistoryModal() {
-      const history = JSON.parse(localStorage.getItem('typingHistory') || '[]');
+      if (!selectedClass || !selectedSeat) {
+        promptStudentInfo('g2');
+        return;
+      }
+
+      document.getElementById('history-modal-subtitle').innerText = `目前展示冒險者：${selectedClass} - ${selectedSeat} 號 本機戰報`;
+
+      const allHistory = JSON.parse(localStorage.getItem('typingHistory') || '[]');
+      const myHistory = allHistory.filter(item => 
+        item.className === selectedClass && String(item.seat) === String(selectedSeat)
+      );
+
       const container = document.getElementById('history-list');
 
-      if (history.length === 0) {
-        container.innerHTML = '<p class="text-center text-slate-400 py-6 text-base font-black">尚無冒險紀錄</p>';
+      if (myHistory.length === 0) {
+        container.innerHTML = '<p class="text-center text-slate-400 py-6 text-base font-black">該冒險者在本機尚無個人冒險紀錄</p>';
       } else {
-        container.innerHTML = history.map((item) => `
+        container.innerHTML = myHistory.map((item) => `
           <div class="bg-amber-50 cartoon-box p-3 rounded-2xl flex justify-between items-center">
             <div>
               <div class="flex items-center space-x-2">
@@ -1409,8 +1621,12 @@
     function closeHistoryModal() { document.getElementById('history-modal').classList.add('hidden'); }
 
     function clearHistory() {
-      if (confirm('確定要清除歷史戰報紀錄嗎？')) {
-        localStorage.removeItem('typingHistory');
+      if (confirm(`確定要清除【${selectedClass} - ${selectedSeat} 號】在部電腦上的個人戰報紀錄嗎？`)) {
+        const allHistory = JSON.parse(localStorage.getItem('typingHistory') || '[]');
+        const remainHistory = allHistory.filter(item => 
+          !(item.className === selectedClass && String(item.seat) === String(selectedSeat))
+        );
+        localStorage.setItem('typingHistory', JSON.stringify(remainHistory));
         openHistoryModal();
       }
     }
